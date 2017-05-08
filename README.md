@@ -1,6 +1,6 @@
-<p align="center" >
+<!--<p align="center" >
   <img src="demo.gif" title="demo" float=left>
-</p>
+</p>-->
 
 ## 图解..
 <p align="center" >
