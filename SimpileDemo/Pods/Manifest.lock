@@ -1,0 +1,17 @@
+PODS:
+  - JPFPSStatus (0.1)
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
+
+DEPENDENCIES:
+  - JPFPSStatus (~> 0.1)
+  - SDWebImage (~> 4.0.0)
+
+SPEC CHECKSUMS:
+  JPFPSStatus: 4467a17488382e4c1700bd9d18c92ae581fd6305
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+
+PODFILE CHECKSUM: 14e6ad31a64fbea943ee2d1cdfc683809f069536
+
+COCOAPODS: 1.2.1
