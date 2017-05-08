@@ -2,7 +2,7 @@
   <img src="demo.gif" title="demo" float=left>
 </p>
 
-##图解吧..
+## 图解..
 <p align="center" >
   <img src="ALL.png" title="ALL" float=left>
 </p>
