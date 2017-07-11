@@ -5,8 +5,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-FOUNDATION_EXPORT  NSInteger currentRow(NSInteger count);
+FOUNDATION_EXPORT  NSUInteger sectionMaxCount(NSUInteger totalCount);
+FOUNDATION_EXPORT  NSInteger currentRow(NSInteger count,NSUInteger totalCount);
 FOUNDATION_EXPORT  CGFloat caclulatorImageWidth(NSInteger totalCount ,CGFloat viewWidth);
 FOUNDATION_EXPORT  CGSize caculatorViewSizeWithCount(NSInteger totalCount, CGFloat viewWidth);
 FOUNDATION_EXPORT  CGRect rectForIndexImage(NSInteger index,NSInteger totalCount,CGFloat viewWidth);

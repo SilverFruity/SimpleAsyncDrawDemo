@@ -6,7 +6,6 @@
 
 #import "AsyncCollectionView.h"
 
-NSUInteger sectionMaxCount = 3;
 CGFloat cellMargin = 5;
 @interface AsyncCollectionView()
 {
@@ -45,16 +44,6 @@ CGFloat cellMargin = 5;
     
     [self initialDraw];
 }
-
-//- (NSUInteger)cellTotalCount{
-//    __block NSUInteger count = 0;
-//    [self.drawOperationQueue addOperationWithBlock:^{
-//       dispatch_sync(dispatch_get_global_queue(0, 0), ^{
-//           count = _cellTotalCount;
-//       });
-//    }];
-//    return count;
-//}
 
 - (void)initialDraw{
     [self.drawOperationQueue addOperationWithBlock:^{
@@ -177,26 +166,35 @@ CGFloat cellMargin = 5;
 
 @end
 
-NSInteger currentRow(NSInteger count){
-    return count / sectionMaxCount;
+NSUInteger sectionMaxCount(NSUInteger totalCount){
+    if (totalCount == 1) {
+        return 1;
+    }else{
+        return 3;
+    }
+}
+
+NSInteger currentRow(NSInteger count,NSUInteger totalCount){
+    return count / sectionMaxCount(totalCount);
 }
 
 CGFloat caclulatorImageWidth(NSInteger totalCount ,CGFloat viewWidth){
-    return (viewWidth - (sectionMaxCount - 1) * cellMargin) / sectionMaxCount;
+    CGFloat width = (viewWidth - (sectionMaxCount(totalCount) - 1) * cellMargin) / sectionMaxCount(totalCount);
+    return totalCount == 1 ? width * .66 : width;
 }
 
 CGSize caculatorViewSizeWithCount(NSInteger totalCount, CGFloat viewWidth){
     if (totalCount == 0) {
         return CGSizeMake(viewWidth, 0);
     }
-    CGFloat rowCount = currentRow(totalCount - 1);
+    CGFloat rowCount = currentRow(totalCount - 1,totalCount);
     CGFloat viewHeight = caclulatorImageWidth(totalCount,viewWidth) * (rowCount + 1) + rowCount * cellMargin;
     return CGSizeMake(viewWidth, viewHeight);
 }
 
 CGRect rectForIndexImage(NSInteger index,NSInteger totalCount,CGFloat viewWidth){
     CGFloat width = caclulatorImageWidth(totalCount,viewWidth);
-    CGFloat x = (index % sectionMaxCount) * (width + cellMargin) ;
-    CGFloat y = currentRow(index) * (width + cellMargin);
+    CGFloat x = (index % sectionMaxCount(totalCount)) * (width + cellMargin) ;
+    CGFloat y = currentRow(index,totalCount) * (width + cellMargin);
     return CGRectMake(x, y, width, width);
 }

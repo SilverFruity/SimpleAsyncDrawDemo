@@ -26,46 +26,56 @@ static NSString *const BlocksDictKey = @"BlocksDictKey";
 
 - (void)observeEvent:(UIControlEvents)event block:(JkmButtonBlock)block{
     [self setEventBlock:block withEvent:event]; //将事件作为key,block作为value,存储到可变字典中
-    [self setTouchEvent:event];  //将触发的事件绑定到button上,使得可以在方法触发里通过 事件 取出 相应的block
     [self addTarget:self action:@selector(JkmBlockButttonTouched:) forControlEvents:event];
 }
 
+#pragma mark 点击
 - (void)JkmBlockButttonTouched:(UIButton *)sender{
-    JkmButtonBlock block = [self getEventBlockWithEvent:[sender touchEvent]];
-    if (block) {
-        block(sender);
+    //使用所有的Option进行匹配
+    [self doEvent:UIControlEventTouchDown];
+    [self doEvent:UIControlEventTouchDownRepeat];
+    [self doEvent:UIControlEventTouchDragInside];
+    [self doEvent:UIControlEventTouchDragOutside];
+    [self doEvent:UIControlEventTouchDragEnter];
+    [self doEvent:UIControlEventTouchDragExit];
+    [self doEvent:UIControlEventTouchUpInside];
+    [self doEvent:UIControlEventTouchUpOutside];
+    [self doEvent:UIControlEventTouchCancel];
+}
+
+- (void)doEvent:(UIControlEvents )event{
+    if (self.allControlEvents & event) {
+        JkmButtonBlock block = [self getEventBlockWithEvent:event];
+        if (block) block(self);
     }
 }
 
 #pragma mark - GET & SET
-- (UIControlEvents)touchEvent{
-    NSNumber *number =  objc_getAssociatedObject(self, &TouchEventKey);
-    if (number) {
-        return number.intValue;
-    }
-    return 0;
-}
-
-- (void)setTouchEvent:(UIControlEvents)touchEvent{
-    objc_setAssociatedObject(self, &TouchEventKey, @(touchEvent), OBJC_ASSOCIATION_ASSIGN);
-}
 
 // dict : [@(event) : block]
+
 - (JkmButtonBlock)getEventBlockWithEvent:(UIControlEvents)event{
     NSMutableDictionary *blocksDict =  objc_getAssociatedObject(self, &BlocksDictKey);
     if (blocksDict == nil) {
+        [self willChangeValueForKey:BlocksDictKey];
         objc_setAssociatedObject(self, &BlocksDictKey, [NSMutableDictionary dictionary], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [self didChangeValueForKey:BlocksDictKey];
         return nil;
     }
     return blocksDict[@(event)];
 }
 
 - (void)setEventBlock:(JkmButtonBlock)eventBlock withEvent:(UIControlEvents)event{
+    if (!eventBlock) {
+        return;
+    }
     NSMutableDictionary *blocksDict =  objc_getAssociatedObject(self, &BlocksDictKey);
     if (blocksDict == nil) {
         blocksDict = [NSMutableDictionary dictionary];
         [blocksDict setObject:eventBlock forKey:@(event)];
+        [self willChangeValueForKey:BlocksDictKey];
         objc_setAssociatedObject(self, &BlocksDictKey, blocksDict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [self didChangeValueForKey:BlocksDictKey];
         return;
     }
     [blocksDict setObject:eventBlock forKey:@(event)];

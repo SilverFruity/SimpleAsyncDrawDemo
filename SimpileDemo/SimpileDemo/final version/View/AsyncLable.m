@@ -100,7 +100,6 @@
     NSInteger totalLineCount = [linesArray count];
     CGPoint origins[totalLineCount];
     CTFrameGetLineOrigins(textFrame, CFRangeMake(0, 0), origins);
-    
     int lastLine_y = (int) origins[totalLineCount -1].y;  //最后一行line的原点y坐标
     
     CGFloat ascent;
@@ -109,7 +108,7 @@
     
     CTLineRef line = (__bridge CTLineRef) [linesArray objectAtIndex:totalLineCount-1];
     CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-    total_height = 1000 - lastLine_y + (int) descent + 1;    //+1为了纠正descent转换成int小数点后舍去的值
+    total_height = 1000 - lastLine_y + (int)(ascent * .5) + 1;
     
     CFRelease(textFrame);
     CFRelease(framesetter);

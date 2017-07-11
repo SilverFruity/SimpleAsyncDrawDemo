@@ -69,7 +69,7 @@ NSString *const reuseCellIdentity = @"FinalTableViewCell";
         _dataSource = new;
        dispatch_async(dispatch_get_main_queue(), ^{
                [self.tableView reloadData];
-           self.view.backgroundColor = [UIColor lightGrayColor];
+           self.tableView.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.5];
        });
     });
 
